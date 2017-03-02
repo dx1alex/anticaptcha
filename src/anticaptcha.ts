@@ -85,7 +85,7 @@ export class Anticaptcha {
    * Запрос состояния капчи необходимо выполнять в течение 300 секунд после загрузки.
    * После 300 секунд API будет возвращать ошибку ERROR_NO_SUCH_CAPCHA_ID
    */
-  async get(id: string, name?: string): Promise<string> {
+  async getId(id: string, name?: string): Promise<string> {
     const service = name ? this.services.find(v => v.name === name) : this.service
 
     const res = await new Promise<string>((resolve, reject) => {
@@ -117,7 +117,7 @@ export class Anticaptcha {
 
     for (let i = 0; i < 300000 / this.pause; i++) {
       await sleep(this.pause)
-      let code = await this.get(id, name)
+      let code = await this.getId(id, name)
       if (code) return { id, code, name, time: Date.now() - start }
     }
 

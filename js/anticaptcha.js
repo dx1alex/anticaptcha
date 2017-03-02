@@ -3,10 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const request = require("request");
 class Anticaptcha {
-    constructor(options) {
+    constructor(options, name) {
         this.pause = 3000;
         this.services = Array.isArray(options) ? options : [options];
-        this.service = this.services[0];
+        if (name) {
+            this.use(name);
+        }
+        else {
+            this.service = this.services[0];
+        }
     }
     get key() {
         return this.service.key;
@@ -22,6 +27,7 @@ class Anticaptcha {
         if (!service) {
             throw new Error(`anticaptcha: service "${name}" not found`);
         }
+        return this.service = service;
     }
     next() {
         const i = this.services.findIndex(v => v.name === this.name);
@@ -62,7 +68,7 @@ class Anticaptcha {
      * Запрос состояния капчи необходимо выполнять в течение 300 секунд после загрузки.
      * После 300 секунд API будет возвращать ошибку ERROR_NO_SUCH_CAPCHA_ID
      */
-    async get(id, name) {
+    async getId(id, name) {
         const service = name ? this.services.find(v => v.name === name) : this.service;
         const res = await new Promise((resolve, reject) => {
             request.get(`${service.host}/res.php?key=${service.key}&action=get&id=${id}`, (err, response, body) => {
@@ -72,7 +78,7 @@ class Anticaptcha {
                 resolve(body);
             });
         });
-        if (res == 'CAPCHA_NOT_READY')
+        if (res === 'CAPCHA_NOT_READY')
             return null;
         const [, code] = res.match(/^OK\|(.+)$/) || [, ,];
         if (!code) {
@@ -88,11 +94,11 @@ class Anticaptcha {
         const start = Date.now();
         for (let i = 0; i < 300000 / this.pause; i++) {
             await sleep(this.pause);
-            let code = await this.get(id, name);
+            let code = await this.getId(id, name);
             if (code)
                 return { id, code, name, time: Date.now() - start };
         }
-        const res = 'CAPCHA_NOT_RECOGNIZE';
+        const res = 'CAPTCHA_NOT_RECOGNIZE';
         const error = new Error(`anticaptcha: "${name}" ${res}`);
         error['code'] = res;
         throw error;

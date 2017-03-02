@@ -3,11 +3,11 @@ export declare class Anticaptcha {
     pause: number;
     service: AnticaptchaService;
     services: AnticaptchaService[];
-    constructor(options: AnticaptchaService | AnticaptchaService[]);
+    constructor(options: AnticaptchaService | AnticaptchaService[], name?: string);
     readonly key: string;
     readonly name: string;
     readonly host: string;
-    use(name: string): void;
+    use(name: string): AnticaptchaService;
     next(): AnticaptchaService;
     addService(options: AnticaptchaService | AnticaptchaService[]): void;
     send(options: CaptchaOptions, name?: string): Promise<string>;
@@ -16,7 +16,7 @@ export declare class Anticaptcha {
      * Запрос состояния капчи необходимо выполнять в течение 300 секунд после загрузки.
      * После 300 секунд API будет возвращать ошибку ERROR_NO_SUCH_CAPCHA_ID
      */
-    get(id: string, name?: string): Promise<string>;
+    getId(id: string, name?: string): Promise<string>;
     recognize(options: CaptchaOptions, name?: string): Promise<{
         id: string;
         code: string;
