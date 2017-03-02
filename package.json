@@ -1,0 +1,19 @@
+{
+    "name": "anticaptcha",
+    "version": "1.0.0",
+    "main": "js/index",
+    "types": "js/index.d.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "dx1alex",
+    "devDependencies": {
+        "@types/node": "^7.0.5",
+        "@types/request": "0.0.40"
+    },
+    "dependencies": {
+        "request": "^2.79.0"
+    },
+    "license": "MIT",
+    "description": ""
+}
