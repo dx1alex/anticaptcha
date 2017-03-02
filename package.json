@@ -1,6 +1,6 @@
 {
     "name": "anticaptcha",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "js/index",
     "types": "js/index.d.ts",
     "scripts": {
@@ -15,5 +15,5 @@
         "request": "^2.79.0"
     },
     "license": "MIT",
-    "description": ""
+    "description": "anticaptcha"
 }
